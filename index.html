@@ -100,6 +100,10 @@
   .post:hover h3{text-decoration:underline;text-decoration-color:var(--amarelo);text-decoration-thickness:3px;text-underline-offset:5px}
   .meta{font-size:.85rem;color:var(--suave);margin:0;display:flex;gap:1rem}
   .ver-todos{text-align:center;margin-top:3rem}
+  .ver-todos button{border:0;cursor:pointer;font-size:1rem}
+  .vazio-blog{grid-column:1/-1;text-align:center;color:var(--suave);margin:0}
+  .capa-vazia{width:100%;aspect-ratio:16/10;border-radius:16px;margin-bottom:1rem;background:var(--amarelo);display:grid;place-items:center;font-family:var(--titulo);font-size:3rem;color:#1A1A1A}
+  .post .resumo-post{color:var(--suave);margin:0 0 .5rem}
 
   /* Instagram */
   .insta{padding:5rem 0;text-align:center}
@@ -209,22 +213,8 @@
         <p class="sobre-titulo">ÚLTIMAS HISTÓRIAS</p>
         <h2>Do blog</h2>
       </div>
-      <!-- Exemplos: estes posts vão ser carregados do editor -->
-      <div class="posts">
-        <a class="post" href="#">
-          <img src="img/sorvete.jpg" alt="" loading="lazy" width="720" height="1280">
-          <p class="categorias"><span>SABORES</span><span>SÃO PAULO</span></p>
-          <h3>O sorvete servido dentro do limão</h3>
-          <p class="meta"><span>12/11/2026</span><span>3 min de leitura</span></p>
-        </a>
-        <a class="post" href="#">
-          <img src="img/por-do-sol.jpg" alt="" loading="lazy" width="720" height="1280">
-          <p class="categorias"><span>LUGARES</span></p>
-          <h3>Pôr do sol com vista para São Paulo</h3>
-          <p class="meta"><span>05/11/2026</span><span>2 min de leitura</span></p>
-        </a>
-      </div>
-      <div class="ver-todos"><a class="botao botao--preto" href="#">Ver todas as histórias</a></div>
+      <div class="posts" id="posts"><p class="vazio-blog">Carregando histórias...</p></div>
+      <div class="ver-todos"><button class="botao botao--preto" id="mais" hidden>Carregar mais histórias</button></div>
     </div>
   </section>
 
@@ -276,6 +266,59 @@
     menu.classList.remove('aberto');
     botaoMenu.setAttribute('aria-expanded', 'false');
   }));
+</script>
+<script src="/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script>
+  (function(){
+    const POR_PAGINA = 6;
+    let pagina = 0;
+    const box = document.getElementById('posts');
+    const mais = document.getElementById('mais');
+    let sb;
+    try { sb = supabase.createClient(BLOG_CONFIG.supabaseUrl, BLOG_CONFIG.supabaseKey); }
+    catch (e) { box.innerHTML = '<p class="vazio-blog">Em breve, as primeiras histórias.</p>'; return; }
+
+    function cartao(p){
+      const a = document.createElement('a');
+      a.className = 'post';
+      a.href = '/post.html?slug=' + encodeURIComponent(p.slug);
+      let capa;
+      if (p.cover_url) { capa = document.createElement('img'); capa.src = p.cover_url; capa.alt = ''; capa.loading = 'lazy'; }
+      else { capa = document.createElement('div'); capa.className = 'capa-vazia'; capa.textContent = (p.title || 'G')[0]; }
+      a.append(capa);
+      if (p.categories && p.categories.length) {
+        const cats = document.createElement('p'); cats.className = 'categorias';
+        p.categories.forEach(c => { const s = document.createElement('span'); s.textContent = c.toUpperCase(); cats.append(s); });
+        a.append(cats);
+      }
+      const h = document.createElement('h3'); h.textContent = p.title; a.append(h);
+      if (p.summary) { const r = document.createElement('p'); r.className = 'resumo-post'; r.textContent = p.summary; a.append(r); }
+      const m = document.createElement('p'); m.className = 'meta';
+      const d = document.createElement('span'); d.textContent = new Date(p.published_at).toLocaleDateString('pt-BR');
+      const l = document.createElement('span'); l.textContent = p.reading_minutes + ' min de leitura';
+      m.append(d, l); a.append(m);
+      return a;
+    }
+
+    async function carregar(){
+      mais.disabled = true;
+      const de = pagina * POR_PAGINA;
+      const { data, error } = await sb.from('posts')
+        .select('title,slug,summary,cover_url,categories,published_at,reading_minutes')
+        .eq('status', 'published').lte('published_at', new Date().toISOString())
+        .order('published_at', { ascending: false })
+        .range(de, de + POR_PAGINA);
+      mais.disabled = false;
+      if (pagina === 0) box.innerHTML = '';
+      if (error || (!data.length && pagina === 0)) { box.innerHTML = '<p class="vazio-blog">Em breve, as primeiras histórias.</p>'; mais.hidden = true; return; }
+      data.slice(0, POR_PAGINA).forEach(p => box.append(cartao(p)));
+      mais.hidden = data.length <= POR_PAGINA;
+      pagina++;
+    }
+    mais.addEventListener('click', carregar);
+    carregar();
+  })();
 </script>
 </body>
 </html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gessica Souza | Fora da poça</title>
+<meta name="description" content="Uma história do blog da Gessica Souza.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amarelo:#F0B514; --amarelo-escuro:#D69E00; --preto:#1A1A1A;
+    --fundo:#FFFFFF; --fundo-suave:#FFF6D9; --texto:#1A1A1A; --suave:#5A5A5A; --linha:#E6E6E6;
+    --titulo:"Cinzel", Georgia, "Times New Roman", serif; --corpo:"Montserrat", "Segoe UI", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --fundo:#121212; --fundo-suave:#221E12; --texto:#F4F1E8; --suave:#B9B4A8; --linha:#2C2C2C; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--corpo);line-height:1.6}
+  img{max-width:100%;height:auto;display:block}
+  a{color:inherit}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--amarelo);outline-offset:3px;border-radius:6px}
+  h1,h2,h3{font-family:var(--titulo);font-weight:600;line-height:1.2;margin:0}
+  .wrap{width:min(1224px,100% - 2rem);margin-inline:auto}
+  .estreito{width:min(720px,100% - 2rem);margin-inline:auto}
+
+  .fixo{position:sticky;top:0;z-index:20}
+  .faixa{background:var(--preto);color:#fff;text-align:center;font-size:.75rem;letter-spacing:.08em;padding:.6rem 1rem}
+  .topo{background:var(--fundo);box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  .topo .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.1rem 0}
+  .marca{font-family:var(--titulo);font-weight:700;font-size:1.35rem;text-decoration:none}
+  .menu{display:flex;gap:2rem}
+  .menu a{text-decoration:none;font-weight:500}
+  .menu a:hover{color:var(--amarelo-escuro)}
+
+  .aviso-previa{background:var(--amarelo);color:#1A1A1A;text-align:center;font-weight:700;padding:.7rem 1rem;font-size:.9rem}
+  article{padding:3rem 0 4rem}
+  .voltar{display:inline-block;margin-bottom:1.5rem;text-decoration:none;color:var(--suave);font-weight:500}
+  .voltar:hover{color:var(--amarelo-escuro)}
+  .categorias{display:flex;gap:.5rem;flex-wrap:wrap;margin:0 0 1rem}
+  .categorias span{font-size:.75rem;font-weight:700;letter-spacing:.05em;background:var(--amarelo);color:#1A1A1A;padding:.2rem .65rem;border-radius:999px}
+  article h1{font-size:clamp(2rem,5vw,3rem);margin-bottom:1rem}
+  .meta{color:var(--suave);font-size:.9rem;display:flex;gap:1rem;margin:0 0 2rem}
+  .capa{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:20px;margin-bottom:2.5rem}
+  .conteudo{font-size:1.1rem;line-height:1.8}
+  .conteudo h2{font-size:1.6rem;margin:2.2rem 0 .8rem}
+  .conteudo img{border-radius:16px;margin:1.5rem 0}
+  .conteudo blockquote{margin:1.75rem 0;padding:.25rem 0 .25rem 1.25rem;border-left:4px solid var(--amarelo);font-family:var(--titulo);font-size:1.3rem;line-height:1.5}
+  .conteudo a{color:var(--amarelo-escuro);text-underline-offset:3px}
+  .compartilhar{border-top:1px solid var(--linha);margin-top:3rem;padding-top:1.5rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+  .compartilhar strong{margin-right:.25rem}
+  .botao{display:inline-block;font-family:var(--corpo);font-weight:500;text-decoration:none;padding:.7rem 1.4rem;border-radius:28px;border:1px solid var(--linha);background:none;color:inherit;cursor:pointer;font-size:.95rem}
+  .botao:hover{border-color:var(--amarelo)}
+  .mensagem{text-align:center;padding:5rem 0;color:var(--suave)}
+  .mensagem h1{color:var(--texto);margin-bottom:1rem}
+
+  .rodape{background:var(--preto);color:#fff;padding:2.5rem 0}
+  .rodape .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.9rem}
+  .rodape a{text-decoration:none}
+  .rodape a:hover{color:var(--amarelo)}
+  @media (max-width:600px){ .menu{gap:1.1rem;font-size:.9rem} .marca{font-size:1.1rem} }
+</style>
+</head>
+<body>
+
+<div class="fixo">
+  <div class="faixa">BEM-VINDO! NOVAS DESCOBERTAS TODA SEMANA</div>
+  <header class="topo">
+    <div class="wrap">
+      <a class="marca" href="/">Gessica Souza</a>
+      <nav class="menu" aria-label="Menu principal">
+        <a href="/">Início</a>
+        <a href="/#blog">Blog</a>
+        <a href="/#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<div class="aviso-previa" id="previa" hidden>Pré-visualização: só você está vendo esta história.</div>
+
+<main>
+  <article class="estreito" id="artigo">
+    <p class="mensagem">Carregando história...</p>
+  </article>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <span>© 2026 Gessica Souza</span>
+    <a href="https://www.instagram.com/eu_gessicasouza/" target="_blank" rel="noopener">Instagram @eu_gessicasouza</a>
+  </div>
+</footer>
+
+<script src="/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script>
+  (async function(){
+    const artigo = document.getElementById('artigo');
+    const naoEncontrado = () => {
+      artigo.innerHTML = '<div class="mensagem"><h1>História não encontrada</h1><p>Ela pode ter sido removida ou ainda não foi publicada.</p><a class="botao" href="/#blog">Ver todas as histórias</a></div>';
+    };
+    const slug = new URLSearchParams(location.search).get('slug');
+    if (!slug) { naoEncontrado(); return; }
+
+    const sb = supabase.createClient(BLOG_CONFIG.supabaseUrl, BLOG_CONFIG.supabaseKey);
+    const { data: p, error } = await sb.from('posts')
+      .select('title,summary,cover_url,categories,content_html,published_at,reading_minutes,status')
+      .eq('slug', slug).maybeSingle();
+    if (error || !p) { naoEncontrado(); return; }
+
+    // Rascunhos e agendados só aparecem para a autora logada (pré-visualização)
+    const noAr = p.status === 'published' && new Date(p.published_at) <= new Date();
+    document.getElementById('previa').hidden = noAr;
+
+    document.title = p.title + ' | Gessica Souza';
+    if (p.summary) document.querySelector('meta[name="description"]').setAttribute('content', p.summary);
+
+    artigo.innerHTML = '';
+    const voltar = document.createElement('a'); voltar.className = 'voltar'; voltar.href = '/#blog'; voltar.textContent = '‹ Todas as histórias';
+    artigo.append(voltar);
+    if (p.categories && p.categories.length) {
+      const cats = document.createElement('p'); cats.className = 'categorias';
+      p.categories.forEach(c => { const s = document.createElement('span'); s.textContent = c.toUpperCase(); cats.append(s); });
+      artigo.append(cats);
+    }
+    const h1 = document.createElement('h1'); h1.textContent = p.title || 'Sem título'; artigo.append(h1);
+    const meta = document.createElement('p'); meta.className = 'meta';
+    const data = document.createElement('span');
+    data.textContent = p.published_at ? new Date(p.published_at).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Rascunho';
+    const tempo = document.createElement('span'); tempo.textContent = p.reading_minutes + ' min de leitura';
+    meta.append(data, tempo); artigo.append(meta);
+    if (p.cover_url) { const img = document.createElement('img'); img.className = 'capa'; img.src = p.cover_url; img.alt = ''; artigo.append(img); }
+    const conteudo = document.createElement('div'); conteudo.className = 'conteudo';
+    conteudo.innerHTML = DOMPurify.sanitize(p.content_html);
+    conteudo.querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener'; });
+    artigo.append(conteudo);
+
+    // Compartilhar
+    const comp = document.createElement('div'); comp.className = 'compartilhar';
+    const rotulo = document.createElement('strong'); rotulo.textContent = 'Compartilhar:';
+    const wa = document.createElement('a'); wa.className = 'botao'; wa.target = '_blank'; wa.rel = 'noopener'; wa.textContent = 'WhatsApp';
+    wa.href = 'https://wa.me/?text=' + encodeURIComponent(p.title + ' ' + location.href);
+    const copiar = document.createElement('button'); copiar.className = 'botao'; copiar.textContent = 'Copiar link';
+    copiar.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(location.href); copiar.textContent = 'Link copiado!'; }
+      catch { copiar.textContent = 'Não deu para copiar'; }
+      setTimeout(() => copiar.textContent = 'Copiar link', 2500);
+    });
+    comp.append(rotulo, wa, copiar); artigo.append(comp);
+  })();
+</script>
+</body>
+</html>
