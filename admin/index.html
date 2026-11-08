@@ -97,6 +97,17 @@
   .status-chip{font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;background:var(--fundo-suave)}
   .aviso{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6rem + env(safe-area-inset-bottom,0px));background:var(--preto);color:#fff;padding:.8rem 1.2rem;border-radius:999px;font-weight:500;z-index:30;max-width:90vw;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.2)}
   .carregando{text-align:center;color:var(--suave);padding:3rem 0}
+  .secoes{display:flex;border-bottom:2px solid var(--linha);margin-bottom:1.25rem}
+  .secoes button{flex:1;border:0;background:none;padding:.8rem;font-family:var(--titulo);font-weight:700;font-size:1.1rem;color:var(--suave);border-bottom:3px solid transparent;margin-bottom:-2px}
+  .secoes button[aria-pressed="true"]{color:var(--texto);border-color:var(--amarelo)}
+  .fotos-trab{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.4rem}
+  .foto-trab{position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;border:0;padding:0;background:var(--fundo-suave)}
+  .foto-trab img{width:100%;height:100%;object-fit:cover}
+  .foto-trab .capa-tag{position:absolute;left:.35rem;bottom:.35rem;background:var(--amarelo);color:#1A1A1A;font-size:.7rem;font-weight:700;padding:.1rem .5rem;border-radius:999px}
+  .foto-trab .tirar{position:absolute;top:.3rem;right:.3rem;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:1rem;line-height:1}
+  .add-foto{aspect-ratio:4/5;border:2px dashed var(--linha);border-radius:12px;background:var(--fundo-suave);font-weight:700;font-size:.9rem}
+  .dica{color:var(--suave);font-size:.8rem;margin:0 0 1.25rem}
+  select.entrada{appearance:auto}
 </style>
 </head>
 <body>
@@ -117,15 +128,15 @@
 <!-- LISTA -->
 <section id="v-lista" class="tela" hidden>
   <div class="cabecalho">
-    <h1>Minhas histórias</h1>
+    <h1>Meu painel</h1>
     <button class="btn btn--texto" id="btn-sair">Sair</button>
   </div>
-  <button class="btn btn--amarelo nova" id="btn-nova">+ Nova história</button>
-  <div class="abas" role="tablist">
-    <button class="aba" role="tab" data-aba="rascunhos" aria-selected="true">Rascunhos</button>
-    <button class="aba" role="tab" data-aba="agendados" aria-selected="false">Agendados</button>
-    <button class="aba" role="tab" data-aba="publicados" aria-selected="false">Publicados</button>
+  <div class="secoes">
+    <button data-secao="historias" aria-pressed="true">Histórias</button>
+    <button data-secao="trabalhos" aria-pressed="false">Trabalhos</button>
   </div>
+  <button class="btn btn--amarelo nova" id="btn-nova">+ Nova história</button>
+  <div class="abas" role="tablist" id="abas"></div>
   <div id="lista"></div>
 </section>
 
@@ -178,6 +189,39 @@
   </div>
 </section>
 
+<!-- EDITOR DE TRABALHO -->
+<section id="v-trabalho" class="tela" hidden>
+  <div class="barra-topo">
+    <button class="btn btn--texto" id="t-voltar">‹ Voltar</button>
+    <span class="status-chip" id="t-status">Oculto</span>
+  </div>
+  <div class="fotos-trab" id="t-fotos"></div>
+  <p class="dica">A primeira foto é a capa. Toque numa foto para colocá-la como capa.</p>
+  <input type="file" id="t-arquivo" accept="image/*" multiple hidden>
+
+  <label class="campo"><span>Título</span>
+    <input class="entrada" id="t-titulo" maxlength="80" placeholder="Ex.: Noiva no Ipiranga">
+  </label>
+  <label class="campo"><span>Tipo de trabalho</span>
+    <select class="entrada" id="t-tipo">
+      <option>Noiva</option><option>Madrinha</option><option>Formatura</option>
+      <option selected>Social</option><option>Ensaio</option><option>Tranças</option>
+    </select>
+  </label>
+  <label class="campo"><span>Data</span>
+    <input class="entrada" type="date" id="t-data">
+  </label>
+  <label class="campo"><span>Trabalho realizado</span>
+    <textarea class="entrada" id="t-descricao" maxlength="600" placeholder="Conte o que foi feito: estilo da make, ocasião, produtos..."></textarea>
+  </label>
+  <button class="perigo" id="t-excluir" hidden>Excluir este trabalho</button>
+
+  <div class="acoes">
+    <button class="btn btn--contorno" id="t-ocultar">Salvar oculto</button>
+    <button class="btn btn--amarelo" id="t-publicar">Publicar</button>
+  </div>
+</section>
+
 <div class="carregando" id="carregando">Carregando...</div>
 <div class="aviso" id="aviso" role="status" hidden></div>
 
@@ -186,7 +230,10 @@
 <script>
 const sb = supabase.createClient(BLOG_CONFIG.supabaseUrl, BLOG_CONFIG.supabaseKey);
 const $ = (id) => document.getElementById(id);
-const telas = ['v-login', 'v-lista', 'v-editor'];
+const telas = ['v-login', 'v-lista', 'v-editor', 'v-trabalho'];
+let secao = 'historias';
+let trabalhos = [];
+let trab = null;
 let posts = [];
 let abaAtual = 'rascunhos';
 let atual = null;       // post aberto no editor
@@ -263,9 +310,17 @@ $('form-login').addEventListener('submit', async (e) => {
 $('btn-sair').addEventListener('click', async () => { await sb.auth.signOut(); mostrar('v-login'); });
 
 /* ---------- lista ---------- */
+const ABAS = {
+  historias: [['rascunhos', 'Rascunhos'], ['agendados', 'Agendados'], ['publicados', 'Publicados']],
+  trabalhos: [['publicados', 'Publicados'], ['ocultos', 'Ocultos']]
+};
 async function abrirLista(){
   mostrar('v-lista');
+  document.querySelectorAll('.secoes button').forEach(b => b.setAttribute('aria-pressed', b.dataset.secao === secao));
+  $('btn-nova').textContent = secao === 'historias' ? '+ Nova história' : '+ Novo trabalho';
+  if (!ABAS[secao].some(a => a[0] === abaAtual)) abaAtual = ABAS[secao][0][0];
   $('lista').innerHTML = '<p class="carregando">Carregando...</p>';
+  if (secao === 'trabalhos') { await carregarTrabalhos(); return; }
   const { data, error } = await sb.from('posts')
     .select('id,title,cover_url,status,published_at,updated_at,slug')
     .order('updated_at', { ascending: false });
@@ -273,12 +328,20 @@ async function abrirLista(){
   posts = data;
   desenharLista();
 }
-function desenharLista(){
-  document.querySelectorAll('.aba').forEach(b => {
-    const qtd = posts.filter(p => classificar(p) === b.dataset.aba).length;
-    b.setAttribute('aria-selected', b.dataset.aba === abaAtual);
-    b.textContent = b.dataset.aba[0].toUpperCase() + b.dataset.aba.slice(1) + (qtd ? ` (${qtd})` : '');
+function desenharAbas(contar){
+  const box = $('abas'); box.innerHTML = '';
+  ABAS[secao].forEach(([id, nome]) => {
+    const b = document.createElement('button');
+    b.className = 'aba'; b.setAttribute('role', 'tab');
+    const qtd = contar(id);
+    b.textContent = nome + (qtd ? ` (${qtd})` : '');
+    b.setAttribute('aria-selected', id === abaAtual);
+    b.addEventListener('click', () => { abaAtual = id; secao === 'historias' ? desenharLista() : desenharTrabalhos(); });
+    box.append(b);
   });
+}
+function desenharLista(){
+  desenharAbas(id => posts.filter(p => classificar(p) === id).length);
   const lista = posts.filter(p => classificar(p) === abaAtual);
   const box = $('lista'); box.innerHTML = '';
   if (!lista.length) {
@@ -302,8 +365,8 @@ function desenharLista(){
     box.append(b);
   });
 }
-document.querySelectorAll('.aba').forEach(b => b.addEventListener('click', () => { abaAtual = b.dataset.aba; desenharLista(); }));
-$('btn-nova').addEventListener('click', () => abrirEditor(null));
+document.querySelectorAll('.secoes button').forEach(b => b.addEventListener('click', () => { secao = b.dataset.secao; abaAtual = ''; abrirLista(); }));
+$('btn-nova').addEventListener('click', () => secao === 'historias' ? abrirEditor(null) : abrirTrabalho(null));
 
 /* ---------- editor ---------- */
 async function abrirEditor(id){
@@ -471,6 +534,116 @@ $('btn-excluir').addEventListener('click', async () => {
   const { error } = await sb.from('posts').delete().eq('id', atual.id);
   if (error) { aviso('Não deu para excluir.'); return; }
   alterado = false; aviso('História excluída.'); abrirLista();
+});
+
+/* ---------- trabalhos (portfólio) ---------- */
+const classeTrab = t => t.status === 'published' ? 'publicados' : 'ocultos';
+async function carregarTrabalhos(){
+  const { data, error } = await sb.from('trabalhos')
+    .select('id,titulo,tipo,data,fotos,status').order('data', { ascending: false });
+  if (error) { $('lista').innerHTML = '<p class="vazio">Não deu para carregar. Verifique a internet.</p>'; return; }
+  trabalhos = data; desenharTrabalhos();
+}
+function desenharTrabalhos(){
+  desenharAbas(id => trabalhos.filter(t => classeTrab(t) === id).length);
+  const lista = trabalhos.filter(t => classeTrab(t) === abaAtual);
+  const box = $('lista'); box.innerHTML = '';
+  if (!lista.length) { box.innerHTML = `<p class="vazio">${abaAtual === 'publicados' ? 'Nenhum trabalho publicado ainda.' : 'Nenhum trabalho oculto.'}</p>`; return; }
+  lista.forEach(t => {
+    const b = document.createElement('button'); b.className = 'item';
+    let mini;
+    if (t.fotos && t.fotos[0]) { mini = document.createElement('img'); mini.src = t.fotos[0]; mini.alt = ''; mini.className = 'miniatura'; }
+    else { mini = document.createElement('div'); mini.className = 'miniatura miniatura--vazia'; mini.textContent = 'G'; }
+    const txt = document.createElement('div');
+    const st = document.createElement('strong'); st.textContent = t.titulo || 'Sem título';
+    const sp = document.createElement('span');
+    sp.textContent = `${t.tipo} · ${new Date(t.data + 'T12:00:00').toLocaleDateString('pt-BR')} · ${(t.fotos || []).length} foto(s)`;
+    txt.append(st, sp); b.append(mini, txt);
+    b.addEventListener('click', () => abrirTrabalho(t.id));
+    box.append(b);
+  });
+}
+function hojeISO(){ const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); }
+async function abrirTrabalho(id){
+  if (id) {
+    const { data, error } = await sb.from('trabalhos').select('*').eq('id', id).single();
+    if (error) { aviso('Não deu para abrir este trabalho.'); return; }
+    trab = data;
+  } else {
+    trab = { titulo: '', tipo: 'Social', data: hojeISO(), descricao: '', fotos: [], status: 'draft' };
+  }
+  $('t-titulo').value = trab.titulo;
+  $('t-tipo').value = trab.tipo;
+  if ($('t-tipo').value !== trab.tipo) { const o = document.createElement('option'); o.textContent = trab.tipo; $('t-tipo').append(o); $('t-tipo').value = trab.tipo; }
+  $('t-data').value = trab.data;
+  $('t-descricao').value = trab.descricao;
+  desenharFotosTrab(); atualizarBotoesTrab();
+  alterado = false; mostrar('v-trabalho');
+}
+function atualizarBotoesTrab(){
+  const pub = trab.status === 'published';
+  $('t-status').textContent = pub ? 'Publicado' : 'Oculto';
+  $('t-ocultar').textContent = pub ? 'Ocultar do site' : 'Salvar oculto';
+  $('t-publicar').textContent = pub ? 'Atualizar' : 'Publicar';
+  $('t-excluir').hidden = !trab.id;
+}
+function desenharFotosTrab(){
+  const box = $('t-fotos'); box.innerHTML = '';
+  trab.fotos.forEach((url, i) => {
+    const f = document.createElement('div'); f.className = 'foto-trab';
+    const img = document.createElement('img'); img.src = url; img.alt = `Foto ${i + 1}`;
+    f.append(img);
+    if (i === 0) { const c = document.createElement('span'); c.className = 'capa-tag'; c.textContent = 'CAPA'; f.append(c); }
+    else img.addEventListener('click', () => { trab.fotos.splice(i, 1); trab.fotos.unshift(url); alterado = true; desenharFotosTrab(); });
+    const x = document.createElement('button'); x.className = 'tirar'; x.type = 'button'; x.setAttribute('aria-label', 'Remover foto'); x.textContent = '×';
+    x.addEventListener('click', () => { trab.fotos.splice(i, 1); alterado = true; desenharFotosTrab(); });
+    f.append(x); box.append(f);
+  });
+  const add = document.createElement('button'); add.type = 'button'; add.className = 'add-foto';
+  add.textContent = trab.fotos.length ? '+ Fotos' : '+ Adicionar fotos';
+  add.addEventListener('click', () => $('t-arquivo').click());
+  box.append(add);
+}
+$('t-arquivo').addEventListener('change', async (e) => {
+  const arquivos = [...e.target.files]; e.target.value = '';
+  for (let i = 0; i < arquivos.length; i++) {
+    aviso(`Enviando foto ${i + 1} de ${arquivos.length}...`);
+    try { trab.fotos.push(await enviarFoto(arquivos[i], 'trabalhos')); alterado = true; desenharFotosTrab(); }
+    catch { aviso('Uma foto não pôde ser enviada.'); }
+  }
+  if (arquivos.length) aviso('Fotos adicionadas!');
+});
+['t-titulo', 't-tipo', 't-data', 't-descricao'].forEach(id => $(id).addEventListener('input', () => alterado = true));
+$('t-voltar').addEventListener('click', () => {
+  if (alterado && !confirm('Sair sem salvar as mudanças?')) return;
+  alterado = false; abrirLista();
+});
+async function salvarTrabalho(publicar){
+  const titulo = $('t-titulo').value.trim();
+  if (publicar && (!titulo || !trab.fotos.length)) { aviso('Coloque pelo menos uma foto e um título para publicar.'); return; }
+  if (!publicar && trab.status === 'published' && !confirm('Tirar este trabalho do site?')) return;
+  const linha = {
+    titulo, tipo: $('t-tipo').value, data: $('t-data').value || hojeISO(),
+    descricao: $('t-descricao').value.trim(), fotos: trab.fotos,
+    status: publicar ? 'published' : 'draft'
+  };
+  ['t-ocultar', 't-publicar'].forEach(id => $(id).disabled = true);
+  const res = trab.id
+    ? await sb.from('trabalhos').update(linha).eq('id', trab.id).select().single()
+    : await sb.from('trabalhos').insert(linha).select().single();
+  ['t-ocultar', 't-publicar'].forEach(id => $(id).disabled = false);
+  if (res.error) { aviso('Não deu para salvar. Verifique a internet.'); return; }
+  trab = res.data; alterado = false;
+  aviso(publicar ? 'Publicado no portfólio!' : 'Salvo como oculto.');
+  abaAtual = publicar ? 'publicados' : 'ocultos'; abrirLista();
+}
+$('t-ocultar').addEventListener('click', () => salvarTrabalho(false));
+$('t-publicar').addEventListener('click', () => salvarTrabalho(true));
+$('t-excluir').addEventListener('click', async () => {
+  if (!confirm('Excluir este trabalho? Não dá para desfazer.')) return;
+  const { error } = await sb.from('trabalhos').delete().eq('id', trab.id);
+  if (error) { aviso('Não deu para excluir.'); return; }
+  alterado = false; aviso('Trabalho excluído.'); abrirLista();
 });
 
 /* ---------- início ---------- */

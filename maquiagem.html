@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gessica Souza | Maquiagem com naturalidade em São Paulo</title>
+<meta name="description" content="Maquiadora em São Paulo e Bahia. Beleza elegante, atemporal e personalizada para noivas, eventos e ensaios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amarelo:#F0B514; --amarelo-escuro:#D69E00; --preto:#1A1A1A;
+    --terra:#2B1A0E; --terra-clara:#5A3416;
+    --fundo:#FFFFFF; --fundo-suave:#FFF6D9; --texto:#1A1A1A; --suave:#5A5A5A; --linha:#E6E6E6;
+    --titulo:"Cinzel", Georgia, "Times New Roman", serif; --corpo:"Montserrat", "Segoe UI", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --fundo:#121212; --fundo-suave:#221E12; --texto:#F4F1E8; --suave:#B9B4A8; --linha:#2C2C2C; }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:90px}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--corpo);line-height:1.6}
+  img{max-width:100%;height:auto;display:block}
+  a{color:inherit}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--amarelo);outline-offset:3px;border-radius:6px}
+  h1,h2,h3{font-family:var(--titulo);font-weight:600;line-height:1.2;margin:0}
+  .wrap{width:min(1224px,100% - 2rem);margin-inline:auto}
+
+  .fixo{position:sticky;top:0;z-index:20}
+  .faixa{background:var(--preto);color:#fff;text-align:center;font-size:.75rem;letter-spacing:.08em;padding:.6rem 1rem}
+  .topo{background:var(--fundo);box-shadow:0 2px 10px rgba(0,0,0,.08)}
+  .topo .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.1rem 0}
+  .marca{font-family:var(--titulo);font-weight:700;font-size:1.35rem;text-decoration:none}
+  .menu{display:flex;gap:2rem}
+  .menu a{text-decoration:none;font-weight:500}
+  .menu a:hover,.menu a[aria-current]{color:var(--amarelo-escuro)}
+
+  .botao{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--corpo);font-weight:500;text-decoration:none;padding:.95rem 2rem;border-radius:28px;border:1px solid transparent;cursor:pointer;font-size:1rem}
+  .botao--amarelo{background:var(--amarelo);color:#1A1A1A}
+  .botao--amarelo:hover{background:var(--amarelo-escuro)}
+  .botao--contorno{border-color:currentColor;color:inherit;background:none}
+
+  /* Início com o tom terroso da foto */
+  .inicio{background:radial-gradient(circle at 70% 30%, var(--terra-clara), var(--terra) 65%);color:#fff;overflow:hidden}
+  .inicio .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center;padding:4rem 0 0}
+  .inicio .chamada{color:var(--amarelo);font-size:.85rem;letter-spacing:.08em;margin:0 0 .75rem}
+  .inicio h1{font-size:clamp(2.6rem,6vw,4.5rem);margin-bottom:.5rem}
+  .inicio .sub{font-family:var(--titulo);font-size:clamp(1.2rem,2.5vw,1.6rem);margin:0 0 1.5rem;color:#F3E3C8}
+  .inicio .texto{max-width:30em;margin:0 0 2rem;color:#E8D9C4}
+  .inicio .botoes{display:flex;gap:1rem;flex-wrap:wrap;padding-bottom:4rem}
+  .inicio .foto{align-self:end}
+  .inicio .foto img{width:100%;max-width:520px;margin-left:auto;border-radius:260px 260px 0 0}
+
+  /* Serviços */
+  .servicos{padding:4.5rem 0;background:var(--fundo-suave)}
+  .servicos .grade{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+  .servico{border-top:3px solid var(--amarelo);padding-top:1.25rem}
+  .servico h3{font-size:1.35rem;margin-bottom:.5rem}
+  .servico p{margin:0;color:var(--suave)}
+
+  /* Galeria */
+  .trabalhos{padding:5rem 0}
+  .cabeca{text-align:center;margin-bottom:2rem}
+  .cabeca .rotulo{font-size:.9rem;letter-spacing:.06em;color:var(--suave);margin:0 0 .5rem}
+  .cabeca h2{font-size:clamp(2.2rem,4.5vw,3.2rem)}
+  .filtros{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem}
+  .filtros button{border:1px solid var(--linha);background:none;color:inherit;padding:.5rem 1.1rem;border-radius:999px;font:inherit;font-weight:500;cursor:pointer}
+  .filtros button[aria-pressed="true"]{background:var(--preto);border-color:var(--preto);color:#fff}
+  @media (prefers-color-scheme: dark){.filtros button[aria-pressed="true"]{background:var(--amarelo);border-color:var(--amarelo);color:#1A1A1A}}
+  .grade-trabalhos{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+  .card{position:relative;border:0;padding:0;background:none;cursor:pointer;border-radius:16px;overflow:hidden;text-align:left;color:#fff}
+  .card img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform .4s}
+  .card:hover img{transform:scale(1.04)}
+  .card .info{position:absolute;inset:auto 0 0 0;padding:2.5rem 1rem 1rem;background:linear-gradient(transparent, rgba(0,0,0,.75))}
+  .card .info strong{display:block;font-family:var(--titulo);font-size:1.15rem}
+  .card .info span{font-size:.8rem;opacity:.9}
+  .card .mais-fotos{position:absolute;top:.75rem;right:.75rem;background:rgba(0,0,0,.6);font-size:.75rem;padding:.2rem .6rem;border-radius:999px}
+  .vazio{text-align:center;color:var(--suave);grid-column:1/-1}
+
+  /* Janela do trabalho */
+  dialog{border:0;padding:0;border-radius:20px;width:min(920px,100% - 2rem);max-height:92vh;background:var(--fundo);color:var(--texto)}
+  dialog::backdrop{background:rgba(0,0,0,.75)}
+  .janela{display:grid;grid-template-columns:1.2fr 1fr}
+  .janela .fotos{position:relative;background:#000}
+  .janela .fotos img{width:100%;height:100%;max-height:92vh;object-fit:contain}
+  .janela .seta{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:#1A1A1A;font-size:1.4rem;cursor:pointer}
+  .janela .seta--esq{left:.75rem} .janela .seta--dir{right:.75rem}
+  .janela .contador{position:absolute;bottom:.75rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;padding:.2rem .7rem;border-radius:999px}
+  .janela .detalhes{padding:2rem;overflow:auto;max-height:92vh}
+  .janela .tipo{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.05em;background:var(--amarelo);color:#1A1A1A;padding:.2rem .65rem;border-radius:999px;margin-bottom:.75rem}
+  .janela h3{font-size:1.6rem;margin-bottom:.5rem}
+  .janela .data{color:var(--suave);font-size:.9rem;margin:0 0 1.25rem}
+  .janela .descricao{white-space:pre-line;margin:0 0 1.75rem}
+  .fechar{position:absolute;top:.75rem;right:.75rem;z-index:2;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:1.3rem;cursor:pointer}
+
+  /* Chamada final */
+  .agendar{background:var(--preto);color:#fff;text-align:center;padding:5rem 0}
+  .agendar h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
+  .agendar p{color:#ccc;max-width:32em;margin:0 auto 2rem}
+
+  .rodape{background:var(--preto);color:#fff;padding:2rem 0;border-top:1px solid #333}
+  .rodape .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.9rem}
+  .rodape a{text-decoration:none}
+  .rodape a:hover{color:var(--amarelo)}
+
+  @media (max-width:860px){
+    .menu{gap:1.1rem;font-size:.9rem}
+    .marca{font-size:1.1rem}
+    .inicio .wrap{grid-template-columns:1fr;text-align:center;padding-top:2.5rem;gap:1.5rem}
+    .inicio .texto{margin-inline:auto}
+    .inicio .botoes{justify-content:center;padding-bottom:0}
+    .inicio .foto img{margin:0 auto;max-width:340px}
+    .servicos .grade{grid-template-columns:1fr}
+    .grade-trabalhos{grid-template-columns:1fr 1fr;gap:.75rem}
+    .card .info{padding:2rem .7rem .7rem}
+    .card .info strong{font-size:.95rem}
+    .janela{grid-template-columns:1fr}
+    .janela .fotos img{max-height:60vh}
+    .janela .detalhes{max-height:none;padding:1.5rem}
+    dialog{max-height:95vh;overflow:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="fixo">
+  <div class="faixa">MAQUIAGEM EM SÃO PAULO E BAHIA</div>
+  <header class="topo">
+    <div class="wrap">
+      <a class="marca" href="/">Gessica Souza</a>
+      <nav class="menu" aria-label="Menu principal">
+        <a href="/">Blog</a>
+        <a href="/maquiagem.html" aria-current="page">Maquiagem</a>
+        <a href="#agendar">Agendar</a>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<main>
+  <section class="inicio">
+    <div class="wrap">
+      <div>
+        <p class="chamada">MAQUIADORA EM SÃO PAULO</p>
+        <h1>Gessica Souza</h1>
+        <p class="sub">Maquiagem com naturalidade</p>
+        <p class="texto">Te entrego beleza elegante, atemporal e personalizada. Atendo em São Paulo e na Bahia, para noivas, eventos e ensaios.</p>
+        <div class="botoes">
+          <a class="botao botao--amarelo whats" href="#" target="_blank" rel="noopener">Agendar pelo WhatsApp</a>
+          <a class="botao botao--contorno" href="#trabalhos">Ver trabalhos</a>
+        </div>
+      </div>
+      <div class="foto">
+        <img src="img/gessica-maquiagem.jpg" alt="Gessica Souza sorrindo, sentada numa poltrona, com tranças longas" width="757" height="773">
+      </div>
+    </div>
+  </section>
+
+  <section class="servicos" aria-label="Serviços">
+    <div class="wrap grade">
+      <div class="servico">
+        <h3>Maquiagem</h3>
+        <p>Para noivas, madrinhas, formaturas e eventos, realçando a sua beleza com naturalidade.</p>
+      </div>
+      <div class="servico">
+        <h3>Produção de ensaios</h3>
+        <p>Maquiagem pensada para a câmera, do ensaio pessoal ao editorial.</p>
+      </div>
+      <div class="servico">
+        <h3>Instrutora de beleza</h3>
+        <p>Aulas e cursos para quem quer aprender a se maquiar ou fazer da beleza uma profissão.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="trabalhos" id="trabalhos">
+    <div class="wrap">
+      <div class="cabeca">
+        <p class="rotulo">PORTFÓLIO</p>
+        <h2>Trabalhos realizados</h2>
+      </div>
+      <div class="filtros" id="filtros" hidden></div>
+      <div class="grade-trabalhos" id="grade"><p class="vazio">Carregando trabalhos...</p></div>
+    </div>
+  </section>
+
+  <section class="agendar" id="agendar">
+    <div class="wrap">
+      <h2>Vamos agendar a sua maquiagem?</h2>
+      <p>Me chama no WhatsApp contando a data, o local e o tipo de evento. Respondo o mais rápido possível.</p>
+      <a class="botao botao--amarelo whats" href="#" target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <span>© 2026 Gessica Souza</span>
+    <a href="https://www.instagram.com/gessicasouza.raizes/" target="_blank" rel="noopener">Instagram @gessicasouza.raizes</a>
+  </div>
+</footer>
+
+<dialog id="janela" aria-label="Detalhes do trabalho">
+  <button class="fechar" id="fechar" aria-label="Fechar">×</button>
+  <div class="janela">
+    <div class="fotos">
+      <img id="j-foto" alt="">
+      <button class="seta seta--esq" id="j-ant" aria-label="Foto anterior">‹</button>
+      <button class="seta seta--dir" id="j-prox" aria-label="Próxima foto">›</button>
+      <span class="contador" id="j-contador"></span>
+    </div>
+    <div class="detalhes">
+      <span class="tipo" id="j-tipo"></span>
+      <h3 id="j-titulo"></h3>
+      <p class="data" id="j-data"></p>
+      <p class="descricao" id="j-descricao"></p>
+      <a class="botao botao--amarelo whats" href="#" target="_blank" rel="noopener">Quero uma maquiagem assim</a>
+    </div>
+  </div>
+</dialog>
+
+<script src="/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script>
+  (function(){
+    const WHATS = '5571996508353';
+    const msg = 'Oi Gessica! Vi seu portfólio e quero agendar uma maquiagem.';
+    document.querySelectorAll('.whats').forEach(a => a.href = `https://wa.me/${WHATS}?text=${encodeURIComponent(msg)}`);
+
+    // Exemplos mostrados enquanto ainda não houver trabalhos cadastrados no painel
+    const EXEMPLOS = [1, 2, 3, 4].map(n => ({ titulo: '', tipo: '', data: null, descricao: '', fotos: [`img/trabalhos/trabalho-${n}.jpg`] }));
+
+    const grade = document.getElementById('grade');
+    const filtros = document.getElementById('filtros');
+    const janela = document.getElementById('janela');
+    let trabalhos = [], filtro = 'Todos', aberto = null, fotoAtual = 0;
+
+    const dataBR = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) : '';
+
+    function desenharFiltros(){
+      const tipos = [...new Set(trabalhos.map(t => t.tipo).filter(Boolean))];
+      if (tipos.length < 2) { filtros.hidden = true; return; }
+      filtros.hidden = false; filtros.innerHTML = '';
+      ['Todos', ...tipos].forEach(t => {
+        const b = document.createElement('button');
+        b.textContent = t; b.setAttribute('aria-pressed', t === filtro);
+        b.addEventListener('click', () => { filtro = t; desenharFiltros(); desenharGrade(); });
+        filtros.append(b);
+      });
+    }
+    function desenharGrade(){
+      grade.innerHTML = '';
+      const lista = trabalhos.filter(t => filtro === 'Todos' || t.tipo === filtro);
+      lista.forEach(t => {
+        const b = document.createElement('button'); b.className = 'card';
+        const img = document.createElement('img'); img.src = t.fotos[0]; img.alt = t.titulo || 'Maquiagem feita por Gessica Souza'; img.loading = 'lazy';
+        b.append(img);
+        if (t.fotos.length > 1) { const m = document.createElement('span'); m.className = 'mais-fotos'; m.textContent = `${t.fotos.length} fotos`; b.append(m); }
+        if (t.titulo) {
+          const info = document.createElement('div'); info.className = 'info';
+          const s = document.createElement('strong'); s.textContent = t.titulo;
+          const sp = document.createElement('span'); sp.textContent = [t.tipo, dataBR(t.data)].filter(Boolean).join(' · ');
+          info.append(s, sp); b.append(info);
+        }
+        b.addEventListener('click', () => abrir(t));
+        grade.append(b);
+      });
+    }
+    function mostrarFoto(){
+      document.getElementById('j-foto').src = aberto.fotos[fotoAtual];
+      const varias = aberto.fotos.length > 1;
+      ['j-ant', 'j-prox', 'j-contador'].forEach(id => document.getElementById(id).hidden = !varias);
+      document.getElementById('j-contador').textContent = `${fotoAtual + 1} / ${aberto.fotos.length}`;
+    }
+    function abrir(t){
+      aberto = t; fotoAtual = 0;
+      document.getElementById('j-foto').alt = t.titulo || 'Maquiagem feita por Gessica Souza';
+      document.getElementById('j-tipo').textContent = t.tipo; document.getElementById('j-tipo').hidden = !t.tipo;
+      document.getElementById('j-titulo').textContent = t.titulo || 'Maquiagem por Gessica Souza';
+      document.getElementById('j-data').textContent = dataBR(t.data);
+      document.getElementById('j-descricao').textContent = t.descricao;
+      mostrarFoto(); janela.showModal();
+    }
+    document.getElementById('j-ant').addEventListener('click', () => { fotoAtual = (fotoAtual - 1 + aberto.fotos.length) % aberto.fotos.length; mostrarFoto(); });
+    document.getElementById('j-prox').addEventListener('click', () => { fotoAtual = (fotoAtual + 1) % aberto.fotos.length; mostrarFoto(); });
+    document.getElementById('fechar').addEventListener('click', () => janela.close());
+    janela.addEventListener('click', e => { if (e.target === janela) janela.close(); });
+
+    (async () => {
+      let dados = [];
+      try {
+        const sb = supabase.createClient(BLOG_CONFIG.supabaseUrl, BLOG_CONFIG.supabaseKey);
+        const { data, error } = await sb.from('trabalhos')
+          .select('titulo,tipo,data,descricao,fotos').eq('status', 'published').order('data', { ascending: false });
+        if (!error) dados = data.filter(t => t.fotos && t.fotos.length);
+      } catch (e) {}
+      trabalhos = dados.length ? dados : EXEMPLOS;
+      desenharFiltros(); desenharGrade();
+    })();
+  })();
+</script>
+</body>
+</html>
